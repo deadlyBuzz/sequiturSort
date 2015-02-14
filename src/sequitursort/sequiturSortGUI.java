@@ -22,6 +22,7 @@ public class sequiturSortGUI extends javax.swing.JFrame {
         initComponents();
         cbRules.setEnabled(false);// start by disabling the combobox.
         okButton.setEnabled(false); // and the "OK" button
+        instanceCountButton.setEnabled(false);
         cbRules.removeAllItems(); // then clear all existing items.
         globalRules = new HashMap<>();
     }
@@ -52,6 +53,8 @@ public class sequiturSortGUI extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         opWindow = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
+        clearButton = new javax.swing.JButton();
+        instanceCountButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,7 +96,22 @@ public class sequiturSortGUI extends javax.swing.JFrame {
         opWindow.setRows(5);
         jScrollPane3.setViewportView(opWindow);
 
-        jLabel6.setText("Output Window (CTRL+C to copy)");
+        jLabel6.setText("Output Window (Select & CTRL+C to copy)");
+
+        clearButton.setText("Clear");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
+
+        instanceCountButton.setText("Update IC");
+        instanceCountButton.setToolTipText("Update instance count");
+        instanceCountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                instanceCountButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -121,9 +139,15 @@ public class sequiturSortGUI extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(instanceCountButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(clearButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 98, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +157,7 @@ public class sequiturSortGUI extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -149,14 +173,15 @@ public class sequiturSortGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cbRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(okButton))
-                        .addGap(0, 14, Short.MAX_VALUE))
+                        .addComponent(jLabel5))
                     .addComponent(jScrollPane3))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(okButton)
+                    .addComponent(clearButton)
+                    .addComponent(instanceCountButton))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -167,7 +192,7 @@ public class sequiturSortGUI extends javax.swing.JFrame {
      * @param evt 
      */
     private void goButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goButtonActionPerformed
-        // Build the tempArray
+        // Build the tempArray for the segment,exection time hashmap
         String[] tempString = taSegments.getText().split("(\\r|\\n)"); // one array entry per line.         
         segmentTimes = new HashMap<String,Integer>();
                                                                  // Each line will be "Mark,ExecTime".
@@ -176,7 +201,8 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             if(tempArray.length>1)
                 segmentTimes.put(tempArray[0], Integer.valueOf(tempArray[1]));
         }
-        
+
+        // now build the arrayList for the list of rules.
         tempString = taSequitur.getText().split("[\\r\\n]");
         ArrayList<ruleRep> rules = new ArrayList<>();
         
@@ -211,16 +237,35 @@ public class sequiturSortGUI extends javax.swing.JFrame {
         
         cbRules.setEnabled(0<cbRules.getItemCount()); // as long as there are items, enable the CB
         okButton.setEnabled(cbRules.isEnabled()); // and the "OK" Button.
+        instanceCountButton.setEnabled(cbRules.isEnabled());
     }//GEN-LAST:event_goButtonActionPerformed
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         String selectedRule = (String)cbRules.getSelectedItem();
         printLine("\n-------- Rule "+selectedRule+" Selected. --------");
         ruleRep primaryRule = globalRules.get(selectedRule);
+        printLine(primaryRule.getGrammar());
 
         for(String s:(ArrayList<String>)getRules(primaryRule.getName(),primaryRule))
             printLine(s);
     }//GEN-LAST:event_okButtonActionPerformed
+
+    /**
+     * Quick function to clear the output window
+     * @param evt 
+     */
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        opWindow.setText("");
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void instanceCountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instanceCountButtonActionPerformed
+        // TODO add your handling code here:
+        ruleRep primaryRule = globalRules.get("R0");
+        globalRules = primaryRule.updateInstanceCount(globalRules);
+        Set<String> keys = globalRules.keySet();
+        for(String s:keys)
+            printLine(globalRules.get(s).getName()+":"+String.valueOf(globalRules.get(s).getInstanceCount()));
+    }//GEN-LAST:event_instanceCountButtonActionPerformed
     
     public void printLine(String lineToPrint){
         System.out.println(lineToPrint);
@@ -239,7 +284,7 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             if(s.contains("R")) // if this symbol contains a Rule...
                 temp.addAll(getRules(ruleName+"-"+globalRules.get(s).getName(), globalRules.get(s)));
             else
-                temp.add(ruleName+"-"+s);
+                temp.add(ruleName+"-"+s+";"+String.valueOf(segmentTimes.get(s)));
         }
         return temp;
     }
@@ -284,6 +329,9 @@ public class sequiturSortGUI extends javax.swing.JFrame {
      */
     public class ruleRep{        
         private boolean complete = false;
+        private Integer instanceCount;
+        private Integer usageCount;
+        String grammar;
         private String name = "";
         ArrayList<String> charList;
         ArrayList<String> ruleList;
@@ -293,8 +341,11 @@ public class sequiturSortGUI extends javax.swing.JFrame {
          * @param lineEntry 
          */
         public ruleRep(String lineEntry){
+            instanceCount = 0; //We've created this rule so there is at least one instance.
+            grammar = lineEntry;
             charList = new ArrayList<>();            
             String rule, tempString;
+            usageCount  = Integer.valueOf(lineEntry.replaceAll("(\\d)+\\W+R.+", "$1").trim()); // record the usage count.
             rule = lineEntry.substring(lineEntry.indexOf("R")-1).trim();
             name = rule.substring(0, rule.indexOf("->")-1).trim();
             tempString = rule.substring(rule.indexOf("->")+2);
@@ -305,10 +356,31 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             ruleList = (ArrayList)charList.clone();
         }
         
+        /** Provide a convenience accesser to manage instanceCount **/
+        public Map updateInstanceCount(Integer byAmount, Map<String,ruleRep> globalRules){
+            instanceCount += byAmount;
+            for(String s:ruleList){
+                if(s.contains("R")){ // if this is a Rule
+                    globalRules.get(s).updateInstanceCount(globalRules);
+                }
+            }
+            return globalRules;
+        }
+        
+        /** when it's just required to increment the instance count by 1 **/
+        public Map updateInstanceCount(Map<String,ruleRep> globalRules){
+            return updateInstanceCount(1, globalRules);
+        }
         /** Return an ArrayList representing the symbols in this rule **/
         public ArrayList getCharList(){ return ruleList; }
+        
+        public Integer getInstanceCount(){return instanceCount;}
+        
         /** Function to access the name of the rule **/
         public String getName(){ return this.name;}
+        
+        /** Function from which to display the grammar from which this rule consists **/
+        public String getGrammar(){return this.grammar;}
         
         /** Function to check if the rule processing is complete **/
         public boolean isComplete(){return complete;}
@@ -338,7 +410,7 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             if(charList == null|charList.size()==0) // if the charList has not been initialised
                 return complete; // then we can't check known segments.
             for(String s:charList){ // otherwise, go though each symbol(character) in the rule
-                if(!(s.startsWith("R")|segmentTimes.containsKey(s))) // if it isn't a rule but doesn't exist on the list
+                if(!(s.startsWith("R")|segmentTimes.containsKey(s))) // if it isn't a rule but doesn't exist on the list                    
                     return false;   // then this is an invalid setup.
             }
             return true; // otherwise, we're all good.
@@ -350,7 +422,9 @@ public class sequiturSortGUI extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox cbRules;
+    private javax.swing.JButton clearButton;
     private javax.swing.JButton goButton;
+    private javax.swing.JButton instanceCountButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
