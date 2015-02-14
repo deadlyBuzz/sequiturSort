@@ -14,11 +14,16 @@ import javax.swing.JOptionPane;
 public class sequiturSortGUI extends javax.swing.JFrame {
 
     private Map<String,Integer> segmentTimes; //This is the list of times in a hashmap.
+    private Map<String,ruleRep> globalRules;
     /**
      * Creates new form sequiturSortGUI
      */
     public sequiturSortGUI() {
         initComponents();
+        cbRules.setEnabled(false);// start by disabling the combobox.
+        okButton.setEnabled(false); // and the "OK" button
+        cbRules.removeAllItems(); // then clear all existing items.
+        globalRules = new HashMap<>();
     }
 
     /**
@@ -30,6 +35,7 @@ public class sequiturSortGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         taSequitur = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
@@ -38,6 +44,14 @@ public class sequiturSortGUI extends javax.swing.JFrame {
         taSegments = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         goButton = new javax.swing.JButton();
+        cbRules = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        okButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        opWindow = new javax.swing.JTextArea();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,6 +76,25 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             }
         });
 
+        cbRules.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel4.setText("Once the output has been generated - more rule details are available");
+
+        jLabel5.setText("From here.  Simply select the rule from the combobox.");
+
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
+
+        opWindow.setColumns(20);
+        opWindow.setRows(5);
+        jScrollPane3.setViewportView(opWindow);
+
+        jLabel6.setText("Output Window (CTRL+C to copy)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,39 +102,61 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(goButton)))
-                .addContainerGap())
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(cbRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(okButton))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(goButton))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addContainerGap(31, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(goButton)
-                        .addContainerGap())))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(goButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(okButton))
+                        .addGap(0, 14, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3))
+                .addContainerGap())
         );
 
         pack();
@@ -144,13 +199,50 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             }
             if(loopsComplete) // if loopsComplete is still TRUE - all loops have been addressed.
                 i = rules.size(); // update i to exit the loop                
-        }
+        }        
         // At this stage, print off each rule and it's associated execution time.
-        System.out.println("Name,Execution Time,Complete?");
-        for(ruleRep rR:rules)
-            System.out.println(rR.getRuleSortDetails());
+        printLine("Name,Execution Time,Complete?");        
+        for(ruleRep rR:rules){
+            globalRules.put(rR.getName(), rR); // build the map for further iterations.
+            printLine(rR.getRuleSortDetails());
+            if(rR.isComplete())
+                cbRules.addItem(new String(rR.getName()));
+        }
+        
+        cbRules.setEnabled(0<cbRules.getItemCount()); // as long as there are items, enable the CB
+        okButton.setEnabled(cbRules.isEnabled()); // and the "OK" Button.
     }//GEN-LAST:event_goButtonActionPerformed
 
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        String selectedRule = (String)cbRules.getSelectedItem();
+        printLine("\n-------- Rule "+selectedRule+" Selected. --------");
+        ruleRep primaryRule = globalRules.get(selectedRule);
+
+        for(String s:(ArrayList<String>)getRules(primaryRule.getName(),primaryRule))
+            printLine(s);
+    }//GEN-LAST:event_okButtonActionPerformed
+    
+    public void printLine(String lineToPrint){
+        System.out.println(lineToPrint);
+        opWindow.append(lineToPrint+"\n");
+        
+    }
+    /** 
+     * Recursive function to extract the rule details in array format.
+     * @param ruleName - the prefix for the rule being processed.
+     * @param rR
+     * @return re
+     */
+    private ArrayList<String> getRules(String ruleName,ruleRep rR){
+        ArrayList<String> temp = new ArrayList<>();
+        for(String s:(ArrayList<String>)rR.getCharList()){            
+            if(s.contains("R")) // if this symbol contains a Rule...
+                temp.addAll(getRules(ruleName+"-"+globalRules.get(s).getName(), globalRules.get(s)));
+            else
+                temp.add(ruleName+"-"+s);
+        }
+        return temp;
+    }
     /**
      * @param args the command line arguments
      */
@@ -194,13 +286,14 @@ public class sequiturSortGUI extends javax.swing.JFrame {
         private boolean complete = false;
         private String name = "";
         ArrayList<String> charList;
+        ArrayList<String> ruleList;
         Integer ruleTime = 0;
         /**
          * Constructor - requires a string that represents the rule.
          * @param lineEntry 
          */
         public ruleRep(String lineEntry){
-            charList = new ArrayList<>();
+            charList = new ArrayList<>();            
             String rule, tempString;
             rule = lineEntry.substring(lineEntry.indexOf("R")-1).trim();
             name = rule.substring(0, rule.indexOf("->")-1).trim();
@@ -209,8 +302,15 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             tempString = tempString.replaceAll("\\W*,\\W*", ",");
             //charList.addAll(Arrays.asList(lineEntry.substring(lineEntry.indexOf("->")).split(","))); //<<<<< Updated via netbeans reccommendations.                        
             charList.addAll(Arrays.asList(tempString.split(","))); //<<<<< Updated via netbeans reccommendations.                        
+            ruleList = (ArrayList)charList.clone();
         }
         
+        /** Return an ArrayList representing the symbols in this rule **/
+        public ArrayList getCharList(){ return ruleList; }
+        /** Function to access the name of the rule **/
+        public String getName(){ return this.name;}
+        
+        /** Function to check if the rule processing is complete **/
         public boolean isComplete(){return complete;}
         
         /**
@@ -224,8 +324,7 @@ public class sequiturSortGUI extends javax.swing.JFrame {
             for(int i=0; i<charList.size(); i++){
                 if(segmentTimes.containsKey(charList.get(i))){ // check if this is on the list.
                     ruleTime += (Integer)segmentTimes.get(charList.get(i)); // increase the time for this rule
-                    charList.remove(i--); // remove this from the list.                    
-                    //System.out.println(charList.get(i)+","+String.valueOf(ruleTime));
+                    charList.remove(i--); // remove this from the list.                                        
                 }
                 else
                     complete = false;
@@ -249,51 +348,22 @@ public class sequiturSortGUI extends javax.swing.JFrame {
         public String getRuleSortDetails(){return this.name+","+String.valueOf(this.ruleTime)+","+String.valueOf(complete);}
     }
     
-    /**
-     * A Class for each "character" in the Sequitur output window.
-     * <br/><i>Basically this represents a cell</i>
-     */
-    public abstract class segment{
-        private boolean isSegment = false;
-        private boolean isRule = false;
-        private String segmentName = "";
-        private Integer executionTime = 0;
-        private boolean complete = false;
-        
-        public segment(String name){            
-            this.segmentName = name;
-            if(name.contains("R")){
-                isRule = true;
-                isSegment = false;
-            }
-            else{
-                isSegment = true;            
-                isRule = false;
-            }
-        }
-        
-        public String getName(){
-            return segmentName;
-        }
-        
-        public boolean isRule(){
-            return isRule;
-        }
-        
-        public void setTime(Integer thisTime){
-            executionTime = thisTime;   
-            complete = true;
-        }
-        
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cbRules;
     private javax.swing.JButton goButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JButton okButton;
+    private javax.swing.JTextArea opWindow;
     private javax.swing.JTextArea taSegments;
     private javax.swing.JTextArea taSequitur;
     // End of variables declaration//GEN-END:variables
